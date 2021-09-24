@@ -1,0 +1,28 @@
+@media (min-width: 768px) {
+	.card-title {
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 10px;
+	}
+	
+	.alert {
+		margin-right: 10px;
+		margin-left: 10px;
+	}
+}
+
+.navbar-brand {
+	padding-top: 12px;
+}
+
+.ts-link {
+	float: right;
+}
+
+.ts-titulo {
+	float: left;
+}
+
+.modal-title {
+	margin-top: 10px;
+}

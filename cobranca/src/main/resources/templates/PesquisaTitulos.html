@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="LayoutPadrao">
+<head>
+	<title>Pesquisa de Título</title>
+</head>
+
+<section layout:fragment="conteudo">	
+	
+	<form class="card-title">
+		
+		<div class="card bg-secondary text-white">
+			<div class="clearfix">
+				<div class="float-start">
+					<div class="card-header ts-titulo">Pesquisa de Títulos</div>
+				</div>
+				<div class="float-end">
+					<a class="btn btn-link text-white ts-link" th:href="@{/titulos/novo}">Novo Título</a>
+				</div>
+			</div>
+			
+			<ul class="list-group list-group-flush bg-light">				
+				<li class="list-group-item">
+					<form class="card-title" method="GET" th:object="${filtro}">
+						<div class="form-group">
+							<div class="col-sm-4">
+								<div class="input-group">
+									<input type="text" class="form-control" placeholder="Pesquisar..."
+									autofocus="autofocus" th:field="*{descricao}"></input>
+									<span class="input-group-btn">
+										<button type="submit" class="btn btn-outline-secondary">
+											<i class="bi bi-search"></i>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-hover">
+							<thead>
+								<tr>
+									<th class="text-center col-md-1">#</th>
+									<th class="text-center col-md-2">Descrição</th>
+									<th class="text-center col-md-2">Data de Vencimento</th>
+									<th class="text-center col-md-2">Valor</th>
+									<th class="text-center col-md-2">Status</th>
+									<th class="col-md-1"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="titulo : ${titulos}">
+									<td class="text-center" th:text="${titulo.codigo}"></td>
+									<td class="text-center" th:text="${titulo.descricao}"></td>
+									<td class="text-center" th:text="${{titulo.dataVencimento}}"></td>
+									<td class="text-center" th:text="|R$ ${{titulo.valor}}|"></td>
+									<td class="text-center" th:attr="data-role=${titulo.codigo}">
+										<span class="badge" th:classappend="${titulo.pendente ? 'bg-danger' : 'bg-success'}" 
+											th:text="${titulo.status.descricao}"></span>
+									</td>
+									<td class="text-center">
+										<a class="btn btn-link btn-sm" th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" 
+												title="Editar" data-bs-toggle="tooltip" data-bs-placement="top">
+											<span class="bi-pencil-fill"></span>
+										</a>
+										<a class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#confirmacaoExclusao" 
+												th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+												title="Excluir" rel="tooltip" data-bs-placement="top">
+											<span class="bi bi-trash"></span>
+										</a>
+										<a class="btn btn-link btn-sm js-atualizar-status" th:if="${titulo.pendente}"
+												title="Receber" data-bs-toggle="tooltip" data-bs-placement="top"
+												th:attr="data-codigo=${titulo.codigo}"
+												th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}">
+											<span class="bi bi-check-square-fill">
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="6" th:if="${#lists.isEmpty(titulos)}">Nenhum título foi encontrado</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</li>
+			</ul>
+		</div>
+	
+		<div th:replace="DialogoExclusao"></div>
+		
+	</form>
+	
+</section>
+</html>
